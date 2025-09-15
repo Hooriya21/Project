@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Reminder App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 400px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+
+    .task.overdue {
+      background: #ffcccc;
+    }
+
+    .task.completed {
+      text-decoration: line-through;
+      background: #d4edda;
+    }
+
+    .task button {
+      background: #ff4d4d;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .task button:hover {
+      background: #e60000;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Task Reminder App ✅</h2>
+    <input type="text" id="taskInput" placeholder="Enter task...">
+    <input type="datetime-local" id="deadlineInput">
+    <button onclick="addTask()">Add Task</button>
+    <div id="taskList"></div>
+  </div>
+
+  <script>
+    function addTask() {
+      let taskText = document.getElementById("taskInput").value;
+      let deadline = document.getElementById("deadlineInput").value;
+
+      if (taskText === "" || deadline === "") {
+        alert("Please enter task and deadline!");
+        return;
+      }
+
+      let taskList = document.getElementById("taskList");
+
+      let taskDiv = document.createElement("div");
+      taskDiv.classList.add("task");
+
+      let now = new Date();
+      let deadlineDate = new Date(deadline);
+
+      if (deadlineDate < now) {
+        taskDiv.classList.add("overdue");
+      }
+
+      taskDiv.innerHTML = `
+        <span>${taskText} <br><small>Deadline: ${deadlineDate.toLocaleString()}</small></span>
+        <div>
+          <button onclick="markComplete(this)">✔</button>
+          <button onclick="deleteTask(this)">✖</button>
+        </div>
+      `;
+
+      taskList.appendChild(taskDiv);
+
+      document.getElementById("taskInput").value = "";
+      document.getElementById("deadlineInput").value = "";
+    }
+
+    function deleteTask(button) {
+      button.parentElement.parentElement.remove();
+    }
+
+    function markComplete(button) {
+      let task = button.parentElement.parentElement;
+      task.classList.toggle("completed");
+    }
+  </script>
+</body>
+</html>
